@@ -4,8 +4,8 @@ const state = {
     hospitals: [
         {
             id: 'h1',
-            name: 'City General Clinic',
-            tier: 'Level 3 (Basic)',
+            name: 'Sangareddy Superspecialty Hospital',
+            tier: 'Level 1 (Basic)',
             etaMins: 5,
             isTraumaCenter: false,
             accepting: true,
@@ -13,8 +13,8 @@ const state = {
         },
         {
             id: 'h2',
-            name: 'Apollo Jubilee Hills',
-            tier: 'Level 1 (Major Trauma)',
+            name: 'TIMS Sanathnagar',
+            tier: 'Level 3 (Major Trauma)',
             etaMins: 12,
             isTraumaCenter: true,
             accepting: true,
@@ -22,8 +22,8 @@ const state = {
         },
         {
             id: 'h3',
-            name: 'CARE Hospitals Gachibowli',
-            tier: 'Level 1 (Major Trauma)',
+            name: 'Gandhi Medical college',
+            tier: 'Level 3 (Major Trauma)',
             etaMins: 15,
             isTraumaCenter: true,
             accepting: true,
@@ -68,7 +68,7 @@ function calculateRoute() {
             // Minor injury: Go to closest available, regardless of tier
             selectedHospital = availableHospitals.reduce((prev, curr) => prev.etaMins < curr.etaMins ? prev : curr);
         } else {
-            // Red/Yellow (Urgent/Critical): MUST go to Level 1 Trauma Center
+            // Red/Yellow (Urgent/Critical): MUST go to Level 3 Trauma Center
             const traumaCenters = availableHospitals.filter(h => h.isTraumaCenter);
             
             if (traumaCenters.length > 0) {
@@ -77,7 +77,7 @@ function calculateRoute() {
                 // Check if we bypassed a closer hospital
                 const closestOverall = availableHospitals.reduce((prev, curr) => prev.etaMins < curr.etaMins ? prev : curr);
                 if (closestOverall.id !== selectedHospital.id) {
-                    bypassReason = `Bypassed ${closestOverall.name} (+${selectedHospital.etaMins - closestOverall.etaMins} mins) - Required Level 1 Trauma Center.`;
+                    bypassReason = `Bypassed ${closestOverall.name} (+${selectedHospital.etaMins - closestOverall.etaMins} mins) - Required Level 3 Trauma Center.`;
                 }
 
                 // Check if the closest trauma center was on divert
@@ -89,7 +89,7 @@ function calculateRoute() {
             } else {
                 // Fallback if all trauma centers are full (should ideally never happen, but handle it)
                 selectedHospital = availableHospitals.reduce((prev, curr) => prev.etaMins < curr.etaMins ? prev : curr);
-                bypassReason = "CRITICAL WARNING: All Level 1 centers full. Routing to closest available basic facility.";
+                bypassReason = "CRITICAL WARNING: All Level 3 centers full. Routing to closest available basic facility.";
             }
         }
     }
